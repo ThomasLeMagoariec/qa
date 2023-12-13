@@ -1,0 +1,16 @@
+HELP: to get help type help or use help <command>
+
+Available commands:
+
+    - hello
+    - name
+    - version
+    - exit
+    - echo [string]
+    - hash <string>
+    - help <string>
+
+Global variables:
+    - DEBUG (int)
+    - TRANSPARENCY (int)
+    

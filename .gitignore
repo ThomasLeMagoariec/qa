@@ -1,0 +1,5 @@
+.vscode
+.plugins
+.bin
+build_plugins.bat
+build.bat
