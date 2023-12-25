@@ -209,9 +209,7 @@ enum Op_codes execute(char *cmds[], int argc)
         case 2090756197:                             // test
             if (!DEBUG) return OP_INVALID;
 
-            char* res = join(cmds, sizeof(cmds) / sizeof(cmds[0]) + (argc - 1));
-
-            printf(">%s<", res);
+            system("cd");
 
             return OP_TEST;
         case 177583:                                 // empty
