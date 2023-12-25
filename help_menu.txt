@@ -18,3 +18,4 @@ Global variables:
 
 for more help visit:
     https://github.com/ThomasLeMagoariec/qa/tree/main#qa-quick-access
+    
