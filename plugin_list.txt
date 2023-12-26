@@ -1,4 +1,3 @@
 my_plugin
 yes
 wc
-pm

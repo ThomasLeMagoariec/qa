@@ -128,7 +128,7 @@ void displayHelpCommand(char* cmd)
         printf("QA | %s\n", VERSION);
 
         FILE* help_menu;
-        help_menu = fopen("help_menu.txt", "r");
+        help_menu = fopen("./help_menu.txt", "r");
         char contents[100];
 
         while (fgets(contents, 100, help_menu))
@@ -165,6 +165,9 @@ void displayHelpCommand(char* cmd)
                     printf("TEST: hashes an empty string (pls change)\n");
                     break;
                 }
+            case 193488125:
+                printf("CAT <file>: outputs contents of a file\n");
+                break;
             case 2090324718:
                 displayHelp();
                 break;
@@ -250,16 +253,17 @@ enum Op_codes execute(char *cmds[], int argc)
         default:                                   // unhandled
             if (1)
             {
-                FILE* tmp_plugin = fopen("tmp.bat", "w");
+                FILE* tmp_plugin = fopen("./tmp.bat", "w");
 
-                fprintf(tmp_plugin, "@ECHO off\nbin\\Release\\plugin_manager.exe ");
+                fprintf(tmp_plugin, "@ECHO off\n.\\bin\\Release\\plugin_manager.exe ");
                 printToFile(cmds, argc, 1, tmp_plugin);
 
                 fclose(tmp_plugin);
                 free(tmp_plugin);
 
-                sysres = system("tmp.bat");
-                remove("tmp.bat");
+                sysres = system(".\\tmp.bat");
+                remove("./tmp.bat");
+
                 printf("\n");
             }
             
@@ -267,14 +271,14 @@ enum Op_codes execute(char *cmds[], int argc)
 
             if (TRANSPARENCY)
             {
-                FILE* fptr = fopen("tmp.bat", "w");
+                FILE* fptr = fopen(".\\tmp.bat", "w");
 
                 if (!DEBUG) fprintf(fptr, "@ECHO off\n");
                 printToFile(cmds, argc, 1, fptr);
                 
                 fclose(fptr);
-                system("tmp.bat");
-                remove("tmp.bat");
+                system(".\\tmp.bat");
+                // remove("./tmp.bat");
 
                 return OP_SYSCALL;
             }

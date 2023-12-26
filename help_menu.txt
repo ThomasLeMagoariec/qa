@@ -10,6 +10,7 @@ Available commands:
     - hash <string>
     - help <string>
     - set <string> <int>
+    - cat
 
 Global variables:
     - DEBUG (int)

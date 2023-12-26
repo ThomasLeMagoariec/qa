@@ -35,7 +35,8 @@ void printAllFromArr(char* toPrint[], int iCount, int iStart, int toFile, FILE* 
 
 int main(int argc, char *argv[])
 {
-    FILE* plugin_list = fopen("./plugin_list.txt", "r");
+    
+    FILE* plugin_list = fopen(".\\plugin_list.txt", "r");
 
     if (plugin_list == NULL)
     {
@@ -57,16 +58,16 @@ int main(int argc, char *argv[])
 
     if (!foundMatch) return 1;
 
-    FILE* torun = fopen("tmp_plugin.bat", "w");
+    FILE* torun = fopen(".\\tmp_plugin.bat", "w");
 
-    fprintf(torun, "@ECHO off\nplugins\\%s.exe ", argv[1]);
+    fprintf(torun, "@ECHO off\n.\\plugins\\%s.exe ", argv[1]);
     printAllFromArr(argv, argc, 2, 1, torun);
 
     fclose(torun);
     free(torun);
 
-    int sysres = system("tmp_plugin.bat");
-    remove("tmp_plugin.bat");
-
+    int sysres = system(".\\tmp_plugin.bat");
+    remove("./tmp_plugin.bat");
+    
     return sysres;
 }
