@@ -9,13 +9,16 @@ Available commands:
     - echo [string]
     - hash <string>
     - help <string>
-    - set <string> <int>
-    - cat
+    - set <string> <int> (see Global variables for more detail)
+    - cat <file>
+    - view <string>
 
 Global variables:
     - DEBUG (int)
     - TRANSPARENCY (int)
-    
+
+Const variables:
+    - VERSION (string)
 
 for more help visit:
     https://github.com/ThomasLeMagoariec/qa/tree/main#qa-quick-access

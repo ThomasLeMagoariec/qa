@@ -16,11 +16,11 @@ int main(int argc, char *argv[])
     if (argc == 1)
     {
         for (;;) {
-            printf("y\n");
+            printf("yes\n");
         }
     } else {
         if (hash(argv[1]) == hash("--version")) printf("yes 0.0.1");
-        else if (hash(argv[1]) == hash("--help")) printf("yes <string> prints <string> until stopped");
+        else if (hash(argv[1]) == hash("--help")) printf("yes <string>: prints <string> until stopped");
         else {
             for (;;)
             {

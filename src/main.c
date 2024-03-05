@@ -7,6 +7,11 @@
 #define MAX_WORDS 100
 #define MAX_WORDS_LENGTH 50
 
+#define FG_RED   "\033[31m"
+#define FG_GREEN "\033[32m"
+#define FG_BLUE  "\033[34m"
+#define FG_RESET "\033[39m"
+
 #define printAllFromArr0(toPrint, iCount) printAllFromArr(toPrint, iCount, 0, 0, NULL)
 #define printToFile(toPrint, iCount, iStart, f) printAllFromArr(toPrint, iCount, iStart, 1, f)
 #define concatAllFromArr0(toPrint, iCount) concatAllFromArr(toPrint, iCount, 0)
@@ -14,7 +19,7 @@
 
 int DEBUG = 0;
 int TRANSPARENCY = 1;
-char PROMPT = '$';
+const char PROMPT = '$';
 
 enum Op_codes
 {
@@ -31,7 +36,8 @@ enum Op_codes
     OP_HELP,      // 10
     OP_SET,       // 11
     OP_PLUGIN,    // 12
-    OP_CAT        // 13
+    OP_CAT,       // 13
+    OP_VIEW       // 14
 };
 
 unsigned long hash(char *str)
@@ -168,6 +174,9 @@ void displayHelpCommand(char* cmd)
             case 193488125:
                 printf("CAT <file>: outputs contents of a file\n");
                 break;
+            case 2090831968:
+                printf("VIEW [TRANSPARENCY | DEBUG | VERSION]: views the value of a variable\n");
+                break;
             case 2090324718:
                 displayHelp();
                 break;
@@ -190,7 +199,7 @@ enum Op_codes execute(char *cmds[], int argc)
         case 2090237503:                             // exit
             return OP_EXIT;
         case 261238937:                              // hello
-            printf("Hello ! (QA | %s)\n", VERSION);
+            printf(FG_RED "Hello ! (QA | %s)\n" FG_RESET, VERSION);
             return OP_HELLO;
         case 2090214596:                             // echo
             if (argc == 2) printf("Specify arguments (string)");
@@ -250,6 +259,16 @@ enum Op_codes execute(char *cmds[], int argc)
             free(cat);
 
             return OP_CAT;
+        case 2090831968:                            // view
+            if (argc == 2) printf("specify variable and value");
+            else {
+
+                if (hash(cmds[2]) == hash("TRANSPARENCY")) printf("%d\n", TRANSPARENCY);
+                if (hash(cmds[2]) == hash("DEBUG")) printf("%d\n", DEBUG);
+                if (hash(cmds[2]) == hash("VERSION")) printf("%s\n", VERSION);
+            }
+
+            return OP_VIEW;
         default:                                   // unhandled
             if (1)
             {
@@ -287,17 +306,6 @@ enum Op_codes execute(char *cmds[], int argc)
     }
 }
 
-void freeWords(int wordCount, char *words[])
-{
-    printf("\nstart free");
-    for (int i = 0; i < wordCount; ++i) {
-        free(words[i]);
-    }
-
-    printf("\nfreed mem");
-}
-
-
 int main(int argc, char *argv[])
 {
 
@@ -313,7 +321,7 @@ int main(int argc, char *argv[])
         for (;;)
         {
             char input[MAX_WORDS_LENGTH];
-            printf("\n%c ", PROMPT);
+            printf(FG_BLUE "\n%c " FG_RESET, PROMPT);
             fgets(input, 100, stdin);
 
             wordCount = splitString(input, words);
@@ -322,14 +330,14 @@ int main(int argc, char *argv[])
             enum Op_codes res = execute(words, wordCount);
 
             if (res == 0) break;
-            if (res == 1 && !DEBUG) printf("Invalid Command\n");
-            if (res == 8 && DEBUG) printf("Empty Command\n");
+            if (res == 1 && !DEBUG) printf(FG_RED "Invalid Command\n" FG_RESET);
+            if (res == 8 && DEBUG) printf(FG_RED "Empty Command\n" FG_RESET);
 
             if (DEBUG) printf("%d", res);
         }
 
         printf("cya !");
-
+        free(words);
     } else
     {
         // execute single command

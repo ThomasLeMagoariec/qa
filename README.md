@@ -1,4 +1,4 @@
-# QA (Quick Access)
+r# QA (Quick Access)
 
 A terminal alternative with support for plugins and more features to be added
 
@@ -13,8 +13,6 @@ A terminal alternative with support for plugins and more features to be added
   - help <string>: show the help message
   - set <string> <int>: changes a global variables value
 
-## Global Variables
-  - DEBUG (int): toggle debug messages
   - TRANSPARENCY (int): toggles wether of not host os should run the commands QA couldn't
 
 ## Default plugins

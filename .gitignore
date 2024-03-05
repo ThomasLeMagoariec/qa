@@ -1,5 +1,9 @@
 .vscode
-.plugins
-.bin
+plugins
+bin
+scripts
 build_plugins.bat
 build.bat
+tmp.bat
+tmp_plugin.bat
+
