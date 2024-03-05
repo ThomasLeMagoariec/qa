@@ -1,9 +1,10 @@
 .vscode
-./plugins
-./bin
-./scripts
+plugins/*
+bin/*
+scripts/*
 build_plugins.bat
 build.bat
+run.bat
 tmp.bat
 tmp_plugin.bat
 
