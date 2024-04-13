@@ -16,8 +16,8 @@
 #define concatAllFromArr0(toPrint, iCount) concatAllFromArr(toPrint, iCount, 0)
 #define displayHelp() displayHelpCommand("HELP_BASIC")
 
-int DEBUG = 0;
-int TRANSPARENCY = 1;
+int DEBUG = 1;
+int TRANSPARENCY = 0;
 const char PROMPT = '$';
 
 enum Op_codes
@@ -128,12 +128,12 @@ void displayHelpCommand(char* cmd)
     if (DEBUG) printf("cmd was:%s\n", cmd);
     if (DEBUG) printf("help for %lu\n", hash(cmd));
 
-    if (hash(cmd) == 3529034063)
+    if (hash(cmd) == (3529034063 | 8244868534897264975))
     {
         printf("QA | %s\n", VERSION);
 
         FILE* help_menu;
-        help_menu = fopen("./help_menu.txt", "r");
+        help_menu = fopen("../help_menu.txt", "r");
         char contents[100];
 
         while (fgets(contents, 100, help_menu))
@@ -142,30 +142,29 @@ void displayHelpCommand(char* cmd)
         }
 
         fclose(help_menu);
-        free(help_menu);
     } else
     {
         switch(hash(cmd))
         {
-            case 2090237503:
+            case 2090237503 | 6385204799:
                 printf("EXIT: closes QA\n");
                 break;
-            case 261238937:
+            case 261238937 | 210714636441:
                 printf("HELLO: says hello\n");
                 break;
-            case 2090214596:
+            case 2090214596 | 6385181892:
                 printf("ECHO [string]: outputs everything that follows\n");
                 break;
-            case 2090536006:
+            case 2090536006 | 6385503302:
                 printf("NAME: displays the name of the program\n");
                 break;
-            case 1929407563:
+            case 1929407563 | 229486327000139:
                 printf("VERSION: shows the version of the program\n");
                 break;
-            case 2090320585:
+            case 2090320585 | 6385287881:
                 printf("HASH <string>: hashes a string using QA's hash function\n");
                 break;
-            case 2090756197:
+            case 2090756197 | 6385723493:
                 if (DEBUG){
                     printf("TEST: hashes an empty string (pls change)\n");
                     break;
@@ -173,10 +172,10 @@ void displayHelpCommand(char* cmd)
             case 193488125:
                 printf("CAT <file>: outputs contents of a file\n");
                 break;
-            case 2090831968:
+            case 2090831968 | 6385799264:
                 printf("VIEW [TRANSPARENCY | DEBUG | VERSION]: views the value of a variable\n");
                 break;
-            case 2090324718:
+            case 2090324718 | 6385292014:
                 displayHelp();
                 break;
             default:
@@ -195,37 +194,37 @@ enum Op_codes execute(char *cmds[], int argc)
 
     switch(hash(cmds[1]))
     {
-        case 2090237503:                             // exit
+        case 2090237503 | 6385204799:                             // exit
             return OP_EXIT;
-        case 261238937:                              // hello
+        case 261238937 | 210714636441:                              // hello
             printf(FG_RED "Hello ! (QA | %s)\n" FG_RESET, VERSION);
             return OP_HELLO;
-        case 2090214596:                             // echo
+        case 2090214596 | 6385181892:                             // echo
             if (argc == 2) printf("Specify arguments (string)");
             else printAllFromArr(cmds, argc, 2, 0, NULL);
 
             printf("\n");
             return OP_ECHO;
-        case 2090536006:                             // name
+        case 2090536006 | 6385503302:                             // name
             printf("%s\n", name);
             return OP_NAME;
-        case 1929407563:                             // version
+        case 1929407563 | 229486327000139:                             // version
             printf("%s\n", VERSION);
             return OP_VERSION;
-        case 2090320585:                             // hash
+        case 2090320585 | 6385287881:                             // hash
             if (argc == 2) printf("Specify arguments (string)\n");
             else printf("%lu\n", hash(cmds[2]));
 
             return OP_HASH;
-        case 2090756197:                             // test
+        case 2090756197 | 6385723493:                             // test
             if (!DEBUG) return OP_INVALID;
 
             system("cd");
 
             return OP_TEST;
-        case 177583:                                 // empty
+        case 177583 | 210711370804:                                 // empty
             return OP_EMPTY;
-        case 2090324718:
+        case 2090324718 | 6385292014:                // help
             if (argc == 2) displayHelp();
             else displayHelpCommand(cmds[2]);
 
@@ -255,10 +254,9 @@ enum Op_codes execute(char *cmds[], int argc)
                 printf("%s", contents);
             }
             fclose(cat);
-            free(cat);
 
             return OP_CAT;
-        case 2090831968:                            // view
+        case 2090831968 | 210711370804:                            // view
             if (argc == 2) printf("specify variable and value");
             else {
 
@@ -271,16 +269,26 @@ enum Op_codes execute(char *cmds[], int argc)
         default:                                   // unhandled
             if (1)
             {
-                FILE* tmp_plugin = fopen("./tmp.bat", "w");
+                #ifdef _WIN32
+                    FILE* tmp_plugin = fopen("./tmp.bat", "w");
+                    fprintf(tmp_plugin, "@ECHO off\n.\\bin\\Release\\plugin_manager.exe ");
+                #elif __linux__
+                    FILE* tmp_plugin = fopen("./tmp.sh", "w");
+                    fprintf(tmp_plugin, "#!/bin/bash\n../bin/Release/plugin_manager ");
+                #endif
 
-                fprintf(tmp_plugin, "@ECHO off\n.\\bin\\Release\\plugin_manager.exe ");
                 printToFile(cmds, argc, 1, tmp_plugin);
 
                 fclose(tmp_plugin);
-                free(tmp_plugin);
 
-                sysres = system(".\\tmp.bat");
-                remove("./tmp.bat");
+                #ifdef _WIN32
+                    sysres = system(".\\tmp.bat");
+                    remove("./tmp.bat");
+                #elif __linux__
+                    system("chmod +x ./tmp.sh");
+                    sysres = system("./tmp.sh");
+                    remove("./tmp.sh");
+                #endif
 
                 printf("\n");
             }
@@ -289,14 +297,25 @@ enum Op_codes execute(char *cmds[], int argc)
 
             if (TRANSPARENCY)
             {
-                FILE* fptr = fopen(".\\tmp.bat", "w");
+                #ifdef _WIN32
+                    FILE* fptr = fopen(".\\tmp.bat", "w");
+                    if (!DEBUG) fprintf(fptr, "@ECHO off\n");
+                #elif __linux__
+                    FILE* fptr = fopen("./tmp.sh", "w");
+                    if (!DEBUG) fprintf(fptr, "#!/bin/bash\n");
+                #endif
 
-                if (!DEBUG) fprintf(fptr, "@ECHO off\n");
                 printToFile(cmds, argc, 1, fptr);
                 
                 fclose(fptr);
-                system(".\\tmp.bat");
-                // remove("./tmp.bat");
+                #ifdef _WIN32
+                    system(".\\tmp.bat");
+                    // remove("./tmp.bat");
+                #elif __linux__
+                    system("chmod +x ./tmp.sh");
+                    system("./tmp.sh");
+                    // remove("./tmp.sh");
+                #endif
 
                 return OP_SYSCALL;
             }

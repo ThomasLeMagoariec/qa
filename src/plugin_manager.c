@@ -36,7 +36,7 @@ void printAllFromArr(char* toPrint[], int iCount, int iStart, int toFile, FILE* 
 int main(int argc, char *argv[])
 {
     
-    FILE* plugin_list = fopen(".\\plugin_list.txt", "r");
+    FILE* plugin_list = fopen("../plugin_list.txt", "r");
 
     if (plugin_list == NULL)
     {
@@ -58,16 +58,26 @@ int main(int argc, char *argv[])
 
     if (!foundMatch) return 1;
 
-    FILE* torun = fopen(".\\tmp_plugin.bat", "w");
+    #ifdef _WIN32
+        FILE* torun = fopen(".\\tmp_plugin.bat", "w");
+        fprintf(torun, "@ECHO off\n.\\plugins\\%s.exe ", argv[1]);
+    #elif __linux__
+        FILE* torun = fopen("./tmp_plugin.sh", "w");
+        fprintf(torun, "#!/bin/bash\n./plugins/%s ", argv[1]);
+    #endif
 
-    fprintf(torun, "@ECHO off\n.\\plugins\\%s.exe ", argv[1]);
     printAllFromArr(argv, argc, 2, 1, torun);
 
     fclose(torun);
-    free(torun);
 
-    int sysres = system(".\\tmp_plugin.bat");
-    remove("./tmp_plugin.bat");
-    
+    #ifdef WIN32
+        int sysres = system(".\\tmp_plugin.bat");
+        remove("./tmp_plugin.bat");
+    #elif __linux__
+        system("chmod +x ./tmp_plugin.sh");
+        int sysres = system("./tmp_plugin.sh");
+        remove("./tmp_plugin.sh");
+    #endif
+
     return sysres;
 }
