@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <windows.h>
 
 #define VERSION "0.0.1"
 #define MAX_WORDS 100
@@ -312,7 +311,7 @@ int main(int argc, char *argv[])
     int wordCount;
     char *words[MAX_WORDS];
 
-    SetConsoleTitle(concat("QA | ", VERSION));
+    // SetConsoleTitle(concat("QA | ", VERSION));
 
     if (argc == 1)
     {
@@ -337,7 +336,6 @@ int main(int argc, char *argv[])
         }
 
         printf("cya !");
-        free(words);
     } else
     {
         // execute single command

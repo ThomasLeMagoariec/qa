@@ -1,4 +1,4 @@
-r# QA (Quick Access)
+# QA (Quick Access)
 
 A terminal alternative with support for plugins and more features to be added
 
